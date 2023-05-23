@@ -2,40 +2,39 @@
 
 
 function yeniAd( string $ad ): int {
-    $myFile = fopen( 'names.txt', 'a+' ) or die( 'Unable to open file!' );
-    $lines = array_filter(file( 'names.txt' ));
+    $lines = array_filter( file( 'names.txt', FILE_IGNORE_NEW_LINES ) );
 
-    $new_array = $lines;
-    array_push($new_array, $ad);
-
-    if ( in_array( $ad . "\n", $lines ) ) {
+    if ( in_array( $ad, $lines ) )
         return 0;
-    }
 
-    sort( $new_array );
+    array_push( $lines, $ad );
 
-    file_put_contents('names.txt', '');
+    //1
+    usort( $lines, 'strnatcasecmp' );
 
-    foreach ( $new_array as $new ) {
-        fwrite( $myFile, explode( "\n", $new )[0] . "\n" );
-    }
+    //2  BUT WITH -> //strtolower( $ad ) in return
+    // $x = 0;
+    // foreach ( $lines as $line ) {
+    //     $lines[ $x ] = strtolower( $line );
 
-    fclose( $myFile );
+    //     $x++;
+    // }
 
-    return array_search( $ad, $new_array ) + 1;
+    // sort( $lines );
+
+    file_put_contents('names.txt', implode( "\n", $lines ) );
+
+    return array_search( $ad, $lines ) + 1;
 
 }
 
 
-
-
-
 echo yeniAd( 'Todd' ) . "\n";
-echo yeniAd( 'Sophie' ) . "\n";
+echo yeniAd( 'Asker' ) . "\n";
 echo yeniAd( 'Gunay' ) . "\n";
 echo yeniAd( 'Vincent' ) . "\n";
-echo yeniAd( 'Ulrich' ) . "\n";
 echo yeniAd( 'Aytac' ) . "\n";
-echo yeniAd( 'Asker' ) . "\n";
+echo yeniAd( 'Ulrich' ) . "\n";
 echo yeniAd( 'Anna' ) . "\n";
-
+echo yeniAd( 'Sophie' ) . "\n";
+echo yeniAd( 'aanna' ) . "\n";
